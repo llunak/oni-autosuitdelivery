@@ -34,7 +34,7 @@ namespace AutoSuitDelivery
                 return;
             if(locker.GetStoredOutfit() != null)
                 return;
-            if(GameClock.Instance.GetTime() > timeLastHaveSuit + 600)
+            if(GameClock.Instance.GetTime() > timeLastHaveSuit + Options.Instance.DeliveryAfterTime)
                 locker.ConfigRequestSuit();
         }
     }
