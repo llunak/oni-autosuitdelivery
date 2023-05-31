@@ -1,0 +1,3 @@
+title: "Auto Suit Delivery"
+description: "Automatically triggers delivery of a suit to a dock that has been empty for a while"
+staticID: "llunak.AutoSuitDelivery"
