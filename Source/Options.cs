@@ -11,7 +11,7 @@ namespace AutoSuitDelivery
     {
         [Option("Delivery After Time (s)", "Time in in-game seconds after which a suit is delivered.")]
         [JsonProperty]
-        public int DeliveryAfterTime { get; set; } = 600;
+        public int DeliveryAfterTime { get; set; } = (int)Constants.SECONDS_PER_CYCLE;
 
         public override string ToString()
         {
