@@ -21,19 +21,26 @@ namespace AutoSuitDelivery
         private static FieldInfo onlyTraverseIfUnequipAvailable
             = AccessTools.Field( typeof( SuitMarker ), "onlyTraverseIfUnequipAvailable" );
 
+        public static bool IsApplicableLocker(SuitLocker locker, SuitMarker marker)
+        {
+            if(!locker.GetComponent<SuitLockerAutoDelivery>().deliveryEnabled)
+                return false;
+            if(!locker.smi.sm.isConfigured.Get(locker.smi))
+                return false;
+            if(marker != null && (bool)onlyTraverseIfUnequipAvailable.GetValue( marker ))
+                return false;
+            return true;
+        }
+
         public void Sim4000ms(float dt)
         {
-            if(!deliveryEnabled)
-                return;
             SuitLocker locker = GetComponent<SuitLocker>();
-            if(!locker.smi.sm.isConfigured.Get(locker.smi))
+            if(!IsApplicableLocker(locker, suitMarker))
                 return;
             if(locker.smi.sm.isWaitingForSuit.Get(locker.smi))
-                return;
-            if(suitMarker != null && (bool)onlyTraverseIfUnequipAvailable.GetValue( suitMarker ))
-                return;
+                return; // already waiting
             if(locker.GetStoredOutfit() != null)
-                return;
+                return; // it has a suit
             if(GameClock.Instance.GetTime() > timeLastHaveSuit + Options.Instance.DeliveryAfterTime)
                 locker.ConfigRequestSuit();
         }
