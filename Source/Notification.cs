@@ -155,6 +155,8 @@ namespace AutoSuitDelivery
 
         public static bool DropSuit_Hook()
         {
+            if( !Options.Instance.AvoidNotification )
+                return true;
             return SuitMarker_UnequipSuitReactable_Patch.AllowNotification( FastTrack_SuitMarker );
         }
     }

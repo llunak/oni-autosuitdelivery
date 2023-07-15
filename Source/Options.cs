@@ -13,10 +13,14 @@ namespace AutoSuitDelivery
         [JsonProperty]
         public int DeliveryAfterTime { get; set; } = (int)Constants.SECONDS_PER_CYCLE;
 
+        [Option("Avoid Notification", "Avoid the 'No Docks available' notification for applicable docks.")]
+        [JsonProperty]
+        public bool AvoidNotification { get; set; } = true;
+
         public override string ToString()
         {
-            return string.Format("AutoSuitDelivery.Options[deliveryaftertime={0}]",
-                DeliveryAfterTime);
+            return $"AutoSuitDelivery.Options[deliveryaftertime={DeliveryAfterTime}]"
+                + $"AutoSuitDelivery.Options[avoidnotification={AvoidNotification}]";
         }
 
         public void OnOptionsChanged()
