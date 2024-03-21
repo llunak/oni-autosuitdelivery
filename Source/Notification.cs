@@ -10,8 +10,8 @@ namespace AutoSuitDelivery
 {
     public class SuitMarker_UnequipSuitReactable_Patch
     {
-        private static readonly Type SuitMarker_UnequipSuitReactable_type = AccessTools.TypeByName(
-            "SuitMarker+UnequipSuitReactable" );
+        private static readonly Type SuitMarker_UnequipSuitReactable_type
+            = typeof( SuitMarker ).GetNestedType( "UnequipSuitReactable", BindingFlags.NonPublic );
 
         public static void Patch( Harmony harmony )
         {
@@ -86,8 +86,8 @@ namespace AutoSuitDelivery
 
     public class FastTrack_SuitMarkerUpdater_Patch
     {
-        private static readonly Type FastTrack_SuitMarkerUpdater_type = AccessTools.TypeByName(
-            "PeterHan.FastTrack.GamePatches.SuitMarkerUpdater" );
+        private static readonly Type FastTrack_SuitMarkerUpdater_type
+            = Type.GetType( "PeterHan.FastTrack.GamePatches.SuitMarkerUpdater, FastTrack" );
 
         public static void Patch( Harmony harmony )
         {
