@@ -40,6 +40,7 @@ namespace AutoSuitDelivery
                 //     if(Run_Hook(suitMarker))
                 //     {
                 //         Notification notification = new Notification(MISC.NOTIFICATIONS.SUIT_DROPPED.NAME, ... );
+                int startLoc = -1;
                 if( codes[ i ].opcode == OpCodes.Brfalse_S
                     && i + 3 < codes.Count
                     && codes[ i + 1 ].IsLdloc()
@@ -48,11 +49,27 @@ namespace AutoSuitDelivery
                     && codes[ i + 3 ].opcode == OpCodes.Ldsfld
                     && codes[ i + 3 ].operand.ToString() == "LocString NAME" )
                 {
-                    codes.Insert( i + 3, new CodeInstruction( OpCodes.Ldarg_0 )); // load 'this'
-                    codes.Insert( i + 4, CodeInstruction.LoadField( SuitMarker_UnequipSuitReactable_type, "suitMarker" ));
-                    codes.Insert( i + 5, new CodeInstruction( OpCodes.Call,
+                    startLoc = i + 3;
+                }
+                else if( codes[ i ].opcode == OpCodes.Brfalse_S
+                    && i + 5 < codes.Count
+                    && codes[ i + 1 ].opcode == OpCodes.Nop // Development build has nop's in some places.
+                    && codes[ i + 2 ].IsLdloc()
+                    && codes[ i + 3 ].opcode == OpCodes.Callvirt
+                    && codes[ i + 3 ].operand.ToString() == "Void Unassign()"
+                    && codes[ i + 4 ].opcode == OpCodes.Nop
+                    && codes[ i + 5 ].opcode == OpCodes.Ldsfld
+                    && codes[ i + 5 ].operand.ToString() == "LocString NAME" )
+                {
+                    startLoc = i + 5;
+                }
+                if( startLoc != -1 )
+                {
+                    codes.Insert( startLoc, new CodeInstruction( OpCodes.Ldarg_0 )); // load 'this'
+                    codes.Insert( startLoc + 1, CodeInstruction.LoadField( SuitMarker_UnequipSuitReactable_type, "suitMarker" ));
+                    codes.Insert( startLoc + 2, new CodeInstruction( OpCodes.Call,
                         typeof( SuitMarker_UnequipSuitReactable_Patch ).GetMethod( nameof( Run_Hook ))));
-                    codes.Insert( i + 6, codes[ i ].Clone()); // copy the Brfalse_S
+                    codes.Insert( startLoc + 3, codes[ i ].Clone()); // copy the Brfalse_S
                     found = true;
                     break;
                 }
